@@ -1,0 +1,1379 @@
+{
+  "name": "Getting Transcription",
+  "flow": [
+    {
+      "id": 2,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 368573,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 300
+        },
+        "restore": {
+          "parameters": {
+            "hook": {
+              "data": {
+                "editable": "true"
+              },
+              "label": "AssemblyAI Transcription"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "hook",
+            "type": "hook:gateway-webhook",
+            "label": "Webhook",
+            "required": true
+          },
+          {
+            "name": "maxResults",
+            "type": "number",
+            "label": "Maximum number of results"
+          }
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 300
+        }
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 6,
+              "module": "http:ActionSendData",
+              "version": 3,
+              "parameters": {
+                "handleErrors": false,
+                "useNewZLibDeCompress": true
+              },
+              "mapper": {
+                "ca": "",
+                "qs": [],
+                "url": "https://api.assemblyai.com/v2/transcript/{{2.transcript_id}}/paragraphs",
+                "gzip": true,
+                "method": "get",
+                "headers": [
+                  {
+                    "name": "authorization",
+                    "value": "<Token AssemblyAI>"
+                  },
+                  {
+                    "name": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "timeout": "",
+                "useMtls": false,
+                "authPass": "",
+                "authUser": "",
+                "bodyType": "",
+                "serializeUrl": false,
+                "shareCookies": false,
+                "parseResponse": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
+              },
+              "metadata": {
+                "designer": {
+                  "x": 600,
+                  "y": 150,
+                  "name": "Get Transcript Paragraphs"
+                },
+                "restore": {
+                  "expect": {
+                    "qs": {
+                      "mode": "chose"
+                    },
+                    "method": {
+                      "mode": "chose",
+                      "label": "GET"
+                    },
+                    "headers": {
+                      "mode": "chose",
+                      "items": [null, null]
+                    },
+                    "bodyType": {
+                      "label": "Empty"
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "handleErrors",
+                    "type": "boolean",
+                    "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                    "required": true
+                  },
+                  {
+                    "name": "useNewZLibDeCompress",
+                    "type": "hidden"
+                  }
+                ],
+                "expect": [
+                  {
+                    "name": "url",
+                    "type": "url",
+                    "label": "URL",
+                    "required": true
+                  },
+                  {
+                    "name": "serializeUrl",
+                    "type": "boolean",
+                    "label": "Serialize URL",
+                    "required": true
+                  },
+                  {
+                    "name": "method",
+                    "type": "select",
+                    "label": "Method",
+                    "required": true,
+                    "validate": {
+                      "enum": [
+                        "get",
+                        "head",
+                        "post",
+                        "put",
+                        "patch",
+                        "delete",
+                        "options"
+                      ]
+                    }
+                  },
+                  {
+                    "name": "headers",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name",
+                        "required": true
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Headers"
+                  },
+                  {
+                    "name": "qs",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name",
+                        "required": true
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Query String"
+                  },
+                  {
+                    "name": "bodyType",
+                    "type": "select",
+                    "label": "Body type",
+                    "validate": {
+                      "enum": [
+                        "raw",
+                        "x_www_form_urlencoded",
+                        "multipart_form_data"
+                      ]
+                    }
+                  },
+                  {
+                    "name": "parseResponse",
+                    "type": "boolean",
+                    "label": "Parse response",
+                    "required": true
+                  },
+                  {
+                    "name": "authUser",
+                    "type": "text",
+                    "label": "User name"
+                  },
+                  {
+                    "name": "authPass",
+                    "type": "password",
+                    "label": "Password"
+                  },
+                  {
+                    "name": "timeout",
+                    "type": "uinteger",
+                    "label": "Timeout",
+                    "validate": {
+                      "max": 300,
+                      "min": 1
+                    }
+                  },
+                  {
+                    "name": "shareCookies",
+                    "type": "boolean",
+                    "label": "Share cookies with other HTTP modules",
+                    "required": true
+                  },
+                  {
+                    "name": "ca",
+                    "type": "cert",
+                    "label": "Self-signed certificate"
+                  },
+                  {
+                    "name": "rejectUnauthorized",
+                    "type": "boolean",
+                    "label": "Reject connections that are using unverified (self-signed) certificates",
+                    "required": true
+                  },
+                  {
+                    "name": "followRedirect",
+                    "type": "boolean",
+                    "label": "Follow redirect",
+                    "required": true
+                  },
+                  {
+                    "name": "useQuerystring",
+                    "type": "boolean",
+                    "label": "Disable serialization of multiple same query string keys as arrays",
+                    "required": true
+                  },
+                  {
+                    "name": "gzip",
+                    "type": "boolean",
+                    "label": "Request compressed content",
+                    "required": true
+                  },
+                  {
+                    "name": "useMtls",
+                    "type": "boolean",
+                    "label": "Use Mutual TLS",
+                    "required": true
+                  },
+                  {
+                    "name": "followAllRedirects",
+                    "type": "boolean",
+                    "label": "Follow all redirect",
+                    "required": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": 12,
+              "module": "builtin:BasicRouter",
+              "version": 1,
+              "mapper": null,
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": 150
+                }
+              },
+              "routes": [
+                {
+                  "flow": [
+                    {
+                      "id": 9,
+                      "module": "builtin:BasicFeeder",
+                      "version": 1,
+                      "parameters": {},
+                      "mapper": {
+                        "array": "{{6.data.paragraphs}}"
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 1200,
+                          "y": 0
+                        },
+                        "restore": {
+                          "expect": {
+                            "array": {
+                              "mode": "edit"
+                            }
+                          }
+                        },
+                        "expect": [
+                          {
+                            "mode": "edit",
+                            "name": "array",
+                            "spec": [],
+                            "type": "array",
+                            "label": "Array"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 10,
+                      "module": "util:TextAggregator",
+                      "version": 1,
+                      "parameters": {
+                        "feeder": 9,
+                        "rowSeparator": "\n"
+                      },
+                      "mapper": {
+                        "value": "{{9.text}}"
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 1500,
+                          "y": 0
+                        },
+                        "restore": {
+                          "extra": {
+                            "feeder": {
+                              "label": "Iterator [9]"
+                            }
+                          },
+                          "parameters": {
+                            "rowSeparator": {
+                              "label": "New row"
+                            }
+                          }
+                        },
+                        "parameters": [
+                          {
+                            "name": "rowSeparator",
+                            "type": "select",
+                            "label": "Row separator",
+                            "validate": {
+                              "enum": ["\n", "\t", "other"]
+                            }
+                          }
+                        ],
+                        "expect": [
+                          {
+                            "name": "value",
+                            "type": "text",
+                            "label": "Text"
+                          }
+                        ],
+                        "advanced": true
+                      }
+                    },
+                    {
+                      "id": 7,
+                      "module": "datastore:GetRecord",
+                      "version": 1,
+                      "parameters": {
+                        "datastore": 14959
+                      },
+                      "mapper": {
+                        "key": "{{2.transcript_id}}"
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 1800,
+                          "y": 0
+                        },
+                        "restore": {
+                          "parameters": {
+                            "datastore": {
+                              "label": "Podcast"
+                            }
+                          }
+                        },
+                        "parameters": [
+                          {
+                            "name": "datastore",
+                            "type": "datastore",
+                            "label": "Data store",
+                            "required": true
+                          }
+                        ],
+                        "expect": [
+                          {
+                            "name": "key",
+                            "type": "text",
+                            "label": "Key",
+                            "required": true
+                          }
+                        ],
+                        "interface": [
+                          {
+                            "name": "Name",
+                            "type": "text",
+                            "label": null,
+                            "default": null,
+                            "required": true,
+                            "multiline": false
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 8,
+                      "module": "google-drive:createAFileFromText",
+                      "version": 4,
+                      "parameters": {
+                        "__IMTCONN__": 693224
+                      },
+                      "mapper": {
+                        "name": "{{7.Name}}",
+                        "content": "{{10.text}}",
+                        "convert": true,
+                        "folderId": "/146ZTxDWQWm5ai_nzQMXujVwZi8GDcePu/1DiN-GItSUoHHU4S9AXkdH_ELCMnnz4Ol",
+                        "destination": "drive"
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 2100,
+                          "y": 0
+                        },
+                        "restore": {
+                          "expect": {
+                            "folderId": {
+                              "mode": "chose",
+                              "path": ["Podcast", "Texte"]
+                            },
+                            "destination": {
+                              "label": "My Drive"
+                            }
+                          },
+                          "parameters": {
+                            "__IMTCONN__": {
+                              "data": {
+                                "scoped": "true",
+                                "connection": "google-restricted"
+                              },
+                              "label": "My VisioBot Account (botmeeting.1@gmail.com)"
+                            }
+                          }
+                        },
+                        "parameters": [
+                          {
+                            "name": "__IMTCONN__",
+                            "type": "account:google-restricted",
+                            "label": "Connection",
+                            "required": true
+                          }
+                        ],
+                        "expect": [
+                          {
+                            "name": "destination",
+                            "type": "select",
+                            "label": "Choose a Drive",
+                            "required": true,
+                            "validate": {
+                              "enum": ["drive", "share", "team"]
+                            }
+                          },
+                          {
+                            "name": "name",
+                            "type": "text",
+                            "label": "File Name",
+                            "required": true
+                          },
+                          {
+                            "name": "content",
+                            "type": "text",
+                            "label": "File Content",
+                            "required": true
+                          },
+                          {
+                            "name": "convert",
+                            "type": "boolean",
+                            "label": "Convert the File to Google Docs Document",
+                            "required": true
+                          },
+                          {
+                            "name": "folderId",
+                            "type": "folder",
+                            "label": "New Text File Location",
+                            "required": true
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "flow": [
+                    {
+                      "id": 13,
+                      "module": "builtin:BasicFeeder",
+                      "version": 1,
+                      "parameters": {},
+                      "mapper": {
+                        "array": "{{6.data.paragraphs}}"
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 1200,
+                          "y": 300
+                        },
+                        "restore": {
+                          "expect": {
+                            "array": {
+                              "mode": "edit"
+                            }
+                          }
+                        },
+                        "expect": [
+                          {
+                            "mode": "edit",
+                            "name": "array",
+                            "spec": [],
+                            "type": "array",
+                            "label": "Array"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 14,
+                      "module": "util:TextAggregator",
+                      "version": 1,
+                      "parameters": {
+                        "feeder": 13,
+                        "rowSeparator": ""
+                      },
+                      "mapper": {
+                        "value": "{{13.text}}"
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 1500,
+                          "y": 300
+                        },
+                        "restore": {
+                          "extra": {
+                            "feeder": {
+                              "label": "Iterator [13]"
+                            }
+                          },
+                          "parameters": {
+                            "rowSeparator": {
+                              "label": "Empty"
+                            }
+                          }
+                        },
+                        "parameters": [
+                          {
+                            "name": "rowSeparator",
+                            "type": "select",
+                            "label": "Row separator",
+                            "validate": {
+                              "enum": ["\n", "\t", "other"]
+                            }
+                          }
+                        ],
+                        "expect": [
+                          {
+                            "name": "value",
+                            "type": "text",
+                            "label": "Text"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 11,
+                      "module": "http:ActionSendData",
+                      "version": 3,
+                      "parameters": {
+                        "handleErrors": false,
+                        "useNewZLibDeCompress": true
+                      },
+                      "mapper": {
+                        "ca": "",
+                        "qs": [],
+                        "url": "https://api.openai.com/v1/completions",
+                        "data": "{\n  \"model\": \"text-davinci-002\",\n  \"prompt\": \"{{14.text}}\\n\\n Tl;dr\",\n  \"temperature\": 0,\n  \"max_tokens\": 512,\n  \"top_p\": 1,\n  \"frequency_penalty\": 0,\n  \"presence_penalty\": 0\n}",
+                        "gzip": true,
+                        "method": "post",
+                        "headers": [
+                          {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "name": "Authorization",
+                            "value": "Bearer <Token OpenAI>"
+                          }
+                        ],
+                        "timeout": "",
+                        "useMtls": false,
+                        "authPass": "",
+                        "authUser": "",
+                        "bodyType": "raw",
+                        "contentType": "application/json",
+                        "serializeUrl": false,
+                        "shareCookies": false,
+                        "parseResponse": true,
+                        "followRedirect": true,
+                        "useQuerystring": false,
+                        "followAllRedirects": false,
+                        "rejectUnauthorized": true
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 1800,
+                          "y": 300,
+                          "name": "GPT-3"
+                        },
+                        "restore": {
+                          "expect": {
+                            "qs": {
+                              "mode": "chose"
+                            },
+                            "method": {
+                              "mode": "chose",
+                              "label": "POST"
+                            },
+                            "headers": {
+                              "mode": "chose",
+                              "items": [null, null]
+                            },
+                            "bodyType": {
+                              "label": "Raw"
+                            },
+                            "contentType": {
+                              "label": "JSON (application/json)"
+                            }
+                          }
+                        },
+                        "parameters": [
+                          {
+                            "name": "handleErrors",
+                            "type": "boolean",
+                            "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                            "required": true
+                          },
+                          {
+                            "name": "useNewZLibDeCompress",
+                            "type": "hidden"
+                          }
+                        ],
+                        "expect": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL",
+                            "required": true
+                          },
+                          {
+                            "name": "serializeUrl",
+                            "type": "boolean",
+                            "label": "Serialize URL",
+                            "required": true
+                          },
+                          {
+                            "name": "method",
+                            "type": "select",
+                            "label": "Method",
+                            "required": true,
+                            "validate": {
+                              "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                              ]
+                            }
+                          },
+                          {
+                            "name": "headers",
+                            "spec": [
+                              {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                              },
+                              {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                              }
+                            ],
+                            "type": "array",
+                            "label": "Headers"
+                          },
+                          {
+                            "name": "qs",
+                            "spec": [
+                              {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                              },
+                              {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                              }
+                            ],
+                            "type": "array",
+                            "label": "Query String"
+                          },
+                          {
+                            "name": "bodyType",
+                            "type": "select",
+                            "label": "Body type",
+                            "validate": {
+                              "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                              ]
+                            }
+                          },
+                          {
+                            "name": "parseResponse",
+                            "type": "boolean",
+                            "label": "Parse response",
+                            "required": true
+                          },
+                          {
+                            "name": "authUser",
+                            "type": "text",
+                            "label": "User name"
+                          },
+                          {
+                            "name": "authPass",
+                            "type": "password",
+                            "label": "Password"
+                          },
+                          {
+                            "name": "timeout",
+                            "type": "uinteger",
+                            "label": "Timeout",
+                            "validate": {
+                              "max": 300,
+                              "min": 1
+                            }
+                          },
+                          {
+                            "name": "shareCookies",
+                            "type": "boolean",
+                            "label": "Share cookies with other HTTP modules",
+                            "required": true
+                          },
+                          {
+                            "name": "ca",
+                            "type": "cert",
+                            "label": "Self-signed certificate"
+                          },
+                          {
+                            "name": "rejectUnauthorized",
+                            "type": "boolean",
+                            "label": "Reject connections that are using unverified (self-signed) certificates",
+                            "required": true
+                          },
+                          {
+                            "name": "followRedirect",
+                            "type": "boolean",
+                            "label": "Follow redirect",
+                            "required": true
+                          },
+                          {
+                            "name": "useQuerystring",
+                            "type": "boolean",
+                            "label": "Disable serialization of multiple same query string keys as arrays",
+                            "required": true
+                          },
+                          {
+                            "name": "gzip",
+                            "type": "boolean",
+                            "label": "Request compressed content",
+                            "required": true
+                          },
+                          {
+                            "name": "useMtls",
+                            "type": "boolean",
+                            "label": "Use Mutual TLS",
+                            "required": true
+                          },
+                          {
+                            "name": "contentType",
+                            "type": "select",
+                            "label": "Content type",
+                            "validate": {
+                              "enum": [
+                                "text/plain",
+                                "application/json",
+                                "application/xml",
+                                "text/xml",
+                                "text/html",
+                                "custom"
+                              ]
+                            }
+                          },
+                          {
+                            "name": "data",
+                            "type": "buffer",
+                            "label": "Request content"
+                          },
+                          {
+                            "name": "followAllRedirects",
+                            "type": "boolean",
+                            "label": "Follow all redirect",
+                            "required": true
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 16,
+                      "module": "google-email:ActionSendEmail",
+                      "version": 2,
+                      "parameters": {
+                        "account": 693224
+                      },
+                      "filter": {
+                        "name": "200",
+                        "conditions": [
+                          [
+                            {
+                              "a": "{{11.statusCode}}",
+                              "b": "200",
+                              "o": "text:equal"
+                            }
+                          ]
+                        ]
+                      },
+                      "mapper": {
+                        "cc": [],
+                        "to": ["labatcave.tech@gmail.com"],
+                        "bcc": [],
+                        "from": "",
+                        "html": "{{11.data.choices[].text}}",
+                        "subject": "Récap Podcast",
+                        "attachments": []
+                      },
+                      "metadata": {
+                        "designer": {
+                          "x": 2219,
+                          "y": 295
+                        },
+                        "restore": {
+                          "expect": {
+                            "cc": {
+                              "mode": "chose"
+                            },
+                            "to": {
+                              "mode": "chose",
+                              "items": [null]
+                            },
+                            "bcc": {
+                              "mode": "chose"
+                            },
+                            "attachments": {
+                              "mode": "chose"
+                            }
+                          },
+                          "parameters": {
+                            "account": {
+                              "data": {
+                                "scoped": "true",
+                                "connection": "google-restricted"
+                              },
+                              "label": "My VisioBot Account (botmeeting.1@gmail.com)"
+                            }
+                          }
+                        },
+                        "parameters": [
+                          {
+                            "name": "account",
+                            "type": "account:google-restricted",
+                            "label": "Connection",
+                            "required": true
+                          }
+                        ],
+                        "expect": [
+                          {
+                            "name": "from",
+                            "type": "text",
+                            "label": "From"
+                          },
+                          {
+                            "name": "to",
+                            "spec": {
+                              "name": "value",
+                              "type": "email",
+                              "label": "Email address",
+                              "required": true
+                            },
+                            "type": "array",
+                            "label": "To",
+                            "required": true
+                          },
+                          {
+                            "name": "subject",
+                            "type": "text",
+                            "label": "Subject"
+                          },
+                          {
+                            "name": "html",
+                            "type": "text",
+                            "label": "Content"
+                          },
+                          {
+                            "name": "attachments",
+                            "spec": [
+                              {
+                                "name": "fileName",
+                                "type": "filename",
+                                "label": "File name",
+                                "required": true,
+                                "semantic": "file:name"
+                              },
+                              {
+                                "name": "data",
+                                "type": "buffer",
+                                "label": "Data",
+                                "required": true,
+                                "semantic": "file:data"
+                              },
+                              {
+                                "name": "cid",
+                                "type": "text",
+                                "label": "Content-ID"
+                              }
+                            ],
+                            "type": "array",
+                            "label": "Attachments"
+                          },
+                          {
+                            "name": "cc",
+                            "spec": {
+                              "name": "value",
+                              "type": "email",
+                              "label": "Email address"
+                            },
+                            "type": "array",
+                            "label": "Copy recipient"
+                          },
+                          {
+                            "name": "bcc",
+                            "spec": {
+                              "name": "value",
+                              "type": "email",
+                              "label": "Email address"
+                            },
+                            "type": "array",
+                            "label": "Blind copy recipient"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 1,
+              "module": "http:ActionSendData",
+              "version": 3,
+              "parameters": {
+                "handleErrors": false,
+                "useNewZLibDeCompress": true
+              },
+              "mapper": {
+                "ca": "",
+                "qs": [],
+                "url": "https://api.assemblyai.com/v2/transcript/{{2.transcript_id}}/vtt",
+                "gzip": true,
+                "method": "get",
+                "headers": [
+                  {
+                    "name": "authorization",
+                    "value": "<Token AssemblyAI>"
+                  },
+                  {
+                    "name": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "timeout": "",
+                "useMtls": false,
+                "authPass": "",
+                "authUser": "",
+                "bodyType": "",
+                "serializeUrl": false,
+                "shareCookies": false,
+                "parseResponse": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
+              },
+              "metadata": {
+                "designer": {
+                  "x": 600,
+                  "y": 600,
+                  "name": "Get Transcript vtt"
+                },
+                "restore": {
+                  "expect": {
+                    "qs": {
+                      "mode": "chose"
+                    },
+                    "method": {
+                      "mode": "chose",
+                      "label": "GET"
+                    },
+                    "headers": {
+                      "mode": "chose",
+                      "items": [null, null]
+                    },
+                    "bodyType": {
+                      "label": "Empty"
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "handleErrors",
+                    "type": "boolean",
+                    "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                    "required": true
+                  },
+                  {
+                    "name": "useNewZLibDeCompress",
+                    "type": "hidden"
+                  }
+                ],
+                "expect": [
+                  {
+                    "name": "url",
+                    "type": "url",
+                    "label": "URL",
+                    "required": true
+                  },
+                  {
+                    "name": "serializeUrl",
+                    "type": "boolean",
+                    "label": "Serialize URL",
+                    "required": true
+                  },
+                  {
+                    "name": "method",
+                    "type": "select",
+                    "label": "Method",
+                    "required": true,
+                    "validate": {
+                      "enum": [
+                        "get",
+                        "head",
+                        "post",
+                        "put",
+                        "patch",
+                        "delete",
+                        "options"
+                      ]
+                    }
+                  },
+                  {
+                    "name": "headers",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name",
+                        "required": true
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Headers"
+                  },
+                  {
+                    "name": "qs",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name",
+                        "required": true
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Query String"
+                  },
+                  {
+                    "name": "bodyType",
+                    "type": "select",
+                    "label": "Body type",
+                    "validate": {
+                      "enum": [
+                        "raw",
+                        "x_www_form_urlencoded",
+                        "multipart_form_data"
+                      ]
+                    }
+                  },
+                  {
+                    "name": "parseResponse",
+                    "type": "boolean",
+                    "label": "Parse response",
+                    "required": true
+                  },
+                  {
+                    "name": "authUser",
+                    "type": "text",
+                    "label": "User name"
+                  },
+                  {
+                    "name": "authPass",
+                    "type": "password",
+                    "label": "Password"
+                  },
+                  {
+                    "name": "timeout",
+                    "type": "uinteger",
+                    "label": "Timeout",
+                    "validate": {
+                      "max": 300,
+                      "min": 1
+                    }
+                  },
+                  {
+                    "name": "shareCookies",
+                    "type": "boolean",
+                    "label": "Share cookies with other HTTP modules",
+                    "required": true
+                  },
+                  {
+                    "name": "ca",
+                    "type": "cert",
+                    "label": "Self-signed certificate"
+                  },
+                  {
+                    "name": "rejectUnauthorized",
+                    "type": "boolean",
+                    "label": "Reject connections that are using unverified (self-signed) certificates",
+                    "required": true
+                  },
+                  {
+                    "name": "followRedirect",
+                    "type": "boolean",
+                    "label": "Follow redirect",
+                    "required": true
+                  },
+                  {
+                    "name": "useQuerystring",
+                    "type": "boolean",
+                    "label": "Disable serialization of multiple same query string keys as arrays",
+                    "required": true
+                  },
+                  {
+                    "name": "gzip",
+                    "type": "boolean",
+                    "label": "Request compressed content",
+                    "required": true
+                  },
+                  {
+                    "name": "useMtls",
+                    "type": "boolean",
+                    "label": "Use Mutual TLS",
+                    "required": true
+                  },
+                  {
+                    "name": "followAllRedirects",
+                    "type": "boolean",
+                    "label": "Follow all redirect",
+                    "required": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": 3,
+              "module": "datastore:GetRecord",
+              "version": 1,
+              "parameters": {
+                "datastore": 14959
+              },
+              "mapper": {
+                "key": "{{2.transcript_id}}"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": 600
+                },
+                "restore": {
+                  "parameters": {
+                    "datastore": {
+                      "label": "Podcast"
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "datastore",
+                    "type": "datastore",
+                    "label": "Data store",
+                    "required": true
+                  }
+                ],
+                "expect": [
+                  {
+                    "name": "key",
+                    "type": "text",
+                    "label": "Key",
+                    "required": true
+                  }
+                ],
+                "interface": [
+                  {
+                    "name": "Name",
+                    "type": "text",
+                    "label": null,
+                    "default": null,
+                    "required": true,
+                    "multiline": false
+                  }
+                ]
+              }
+            },
+            {
+              "id": 4,
+              "module": "google-drive:createAFileFromText",
+              "version": 4,
+              "parameters": {
+                "__IMTCONN__": 693224
+              },
+              "mapper": {
+                "name": "{{3.Name}}",
+                "content": "{{1.data}}",
+                "convert": true,
+                "folderId": "/146ZTxDWQWm5ai_nzQMXujVwZi8GDcePu/1qcBdjjIHNCF08EzRE_GlxgvzLgm5aNbL",
+                "destination": "drive"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1200,
+                  "y": 600
+                },
+                "restore": {
+                  "expect": {
+                    "folderId": {
+                      "mode": "chose",
+                      "path": ["Podcast", "Sous-titre"]
+                    },
+                    "destination": {
+                      "label": "My Drive"
+                    }
+                  },
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "data": {
+                        "scoped": "true",
+                        "connection": "google-restricted"
+                      },
+                      "label": "My VisioBot Account (botmeeting.1@gmail.com)"
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account:google-restricted",
+                    "label": "Connection",
+                    "required": true
+                  }
+                ],
+                "expect": [
+                  {
+                    "name": "destination",
+                    "type": "select",
+                    "label": "Choose a Drive",
+                    "required": true,
+                    "validate": {
+                      "enum": ["drive", "share", "team"]
+                    }
+                  },
+                  {
+                    "name": "name",
+                    "type": "text",
+                    "label": "File Name",
+                    "required": true
+                  },
+                  {
+                    "name": "content",
+                    "type": "text",
+                    "label": "File Content",
+                    "required": true
+                  },
+                  {
+                    "name": "convert",
+                    "type": "boolean",
+                    "label": "Convert the File to Google Docs Document",
+                    "required": true
+                  },
+                  {
+                    "name": "folderId",
+                    "type": "folder",
+                    "label": "New Text File Location",
+                    "required": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu1.make.com"
+  }
+}

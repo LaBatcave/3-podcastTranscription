@@ -1,0 +1,699 @@
+{
+  "name": "Podcast Submit",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-drive:watchFilesInAFolder",
+      "version": 4,
+      "parameters": {
+        "limit": 1,
+        "select": "create",
+        "folderId": "/146ZTxDWQWm5ai_nzQMXujVwZi8GDcePu/1-zmnAXHIV2HvR-GnpERF_3yKOJ2ogwAf",
+        "mimeType": "all",
+        "__IMTCONN__": 693224,
+        "destination": "drive"
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "select": {
+              "label": "By Created Time"
+            },
+            "folderId": {
+              "path": ["Podcast", "Source"]
+            },
+            "mimeType": {
+              "label": "All"
+            },
+            "__IMTCONN__": {
+              "data": {
+                "scoped": "true",
+                "connection": "google-restricted"
+              },
+              "label": "My VisioBot Account (botmeeting.1@gmail.com)"
+            },
+            "destination": {
+              "label": "My Drive"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account:google-restricted",
+            "label": "Connection",
+            "required": true
+          },
+          {
+            "name": "select",
+            "type": "select",
+            "label": "Watch Files",
+            "required": true,
+            "validate": {
+              "enum": ["create", "modify"]
+            }
+          },
+          {
+            "name": "destination",
+            "type": "select",
+            "label": "Choose a Drive",
+            "required": true,
+            "validate": {
+              "enum": ["drive", "share", "team"]
+            }
+          },
+          {
+            "name": "mimeType",
+            "type": "select",
+            "label": "File Types to Watch",
+            "required": true,
+            "validate": {
+              "enum": ["all", "document", "spreadsheet", "slide", "drawing"]
+            }
+          },
+          {
+            "name": "limit",
+            "type": "uinteger",
+            "label": "Limit",
+            "required": true
+          },
+          {
+            "name": "folderId",
+            "type": "folder",
+            "label": "Select the Folder to be Watched",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "module": "google-drive:shareAFileFolder",
+      "version": 4,
+      "parameters": {
+        "__IMTCONN__": 693224
+      },
+      "mapper": {
+        "file": "{{1.id}}",
+        "role": "reader",
+        "type": "anyone",
+        "select": "file",
+        "destination": "drive",
+        "allowFileDiscovery": false
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        },
+        "restore": {
+          "expect": {
+            "file": {
+              "mode": "edit",
+              "path": []
+            },
+            "role": {
+              "mode": "chose",
+              "label": "Reader"
+            },
+            "type": {
+              "mode": "chose",
+              "label": "Anyone"
+            },
+            "select": {
+              "label": "File"
+            },
+            "destination": {
+              "label": "My Drive"
+            },
+            "allowFileDiscovery": {
+              "mode": "chose"
+            }
+          },
+          "parameters": {
+            "__IMTCONN__": {
+              "data": {
+                "scoped": "true",
+                "connection": "google-restricted"
+              },
+              "label": "My VisioBot Account (botmeeting.1@gmail.com)"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account:google-restricted",
+            "label": "Connection",
+            "required": true
+          }
+        ],
+        "expect": [
+          {
+            "name": "destination",
+            "type": "select",
+            "label": "Choose a Drive",
+            "required": true,
+            "validate": {
+              "enum": ["drive", "share", "team"]
+            }
+          },
+          {
+            "name": "select",
+            "type": "select",
+            "label": "Select",
+            "required": true,
+            "validate": {
+              "enum": ["file", "folder"]
+            }
+          },
+          {
+            "name": "role",
+            "type": "select",
+            "label": "Role",
+            "required": true,
+            "validate": {
+              "enum": ["owner", "writer", "reader"]
+            }
+          },
+          {
+            "name": "type",
+            "type": "select",
+            "label": "Type",
+            "required": true,
+            "validate": {
+              "enum": ["user", "group", "domain", "anyone"]
+            }
+          },
+          {
+            "mode": "edit",
+            "name": "file",
+            "type": "file",
+            "label": "File ID",
+            "required": true
+          },
+          {
+            "name": "allowFileDiscovery",
+            "type": "boolean",
+            "label": "Allow File Discovery",
+            "required": true
+          }
+        ],
+        "interface": [
+          {
+            "name": "kind",
+            "type": "text",
+            "label": "Kind"
+          },
+          {
+            "name": "id",
+            "type": "text",
+            "label": "File ID"
+          },
+          {
+            "name": "type",
+            "type": "text",
+            "label": "Type"
+          },
+          {
+            "name": "shareLink",
+            "type": "url",
+            "label": "Share Link"
+          },
+          {
+            "name": "emailAddress",
+            "type": "text",
+            "label": "Email Address"
+          },
+          {
+            "name": "domain",
+            "type": "text",
+            "label": "Domain"
+          },
+          {
+            "name": "role",
+            "type": "text",
+            "label": "Role"
+          },
+          {
+            "name": "allowFileDiscovery",
+            "type": "boolean",
+            "label": "Allow File Discovery"
+          },
+          {
+            "name": "displayName",
+            "type": "text",
+            "label": "Display Name"
+          },
+          {
+            "name": "photoLink",
+            "type": "text",
+            "label": "Photo Link"
+          },
+          {
+            "name": "expirationTime",
+            "type": "date",
+            "label": "Expiration Time"
+          },
+          {
+            "name": "teamDrivePermissionDetails",
+            "spec": {
+              "spec": [
+                {
+                  "name": "teamDrivePermissionType",
+                  "type": "text",
+                  "label": "Team Drive Permission Type"
+                },
+                {
+                  "name": "role",
+                  "type": "text",
+                  "label": "Role"
+                },
+                {
+                  "name": "inheritedFrom",
+                  "type": "text",
+                  "label": "Inherited From"
+                },
+                {
+                  "name": "inherited",
+                  "type": "boolean",
+                  "label": "Inherited"
+                }
+              ],
+              "type": "collection"
+            },
+            "type": "array",
+            "label": "Team Drive Permission Details"
+          },
+          {
+            "name": "permissionDetails",
+            "spec": {
+              "spec": [
+                {
+                  "name": "permissionType",
+                  "type": "text",
+                  "label": "Permission Type"
+                },
+                {
+                  "name": "role",
+                  "type": "text",
+                  "label": "Role"
+                },
+                {
+                  "name": "inheritedFrom",
+                  "type": "text",
+                  "label": "Inherited From"
+                },
+                {
+                  "name": "inherited",
+                  "type": "boolean",
+                  "label": "Inherited"
+                }
+              ],
+              "type": "collection"
+            },
+            "type": "array",
+            "label": "Permission Details"
+          },
+          {
+            "name": "deleted",
+            "type": "boolean",
+            "label": "Deleted"
+          },
+          {
+            "name": "webContentLink",
+            "type": "url",
+            "label": "Web Content Link"
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {
+        "handleErrors": false,
+        "useNewZLibDeCompress": true
+      },
+      "mapper": {
+        "ca": "",
+        "qs": [],
+        "url": "https://api.assemblyai.com/v2/transcript",
+        "data": "{\"audio_url\": \"{{2.webContentLink}}\", \"language_code\":\"fr\", \"webhook_url\":\"webhook url\"}",
+        "gzip": true,
+        "method": "post",
+        "headers": [
+          {
+            "name": "authorization",
+            "value": "<Token AssemblyAI>"
+          },
+          {
+            "name": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "timeout": "",
+        "useMtls": false,
+        "authPass": "",
+        "authUser": "",
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "serializeUrl": false,
+        "shareCookies": false,
+        "parseResponse": true,
+        "followRedirect": true,
+        "useQuerystring": false,
+        "followAllRedirects": false,
+        "rejectUnauthorized": true
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0,
+          "name": "Send Audio AssemblyAI"
+        },
+        "restore": {
+          "expect": {
+            "qs": {
+              "mode": "chose"
+            },
+            "method": {
+              "mode": "chose",
+              "label": "POST"
+            },
+            "headers": {
+              "mode": "chose",
+              "items": [null, null]
+            },
+            "bodyType": {
+              "label": "Raw"
+            },
+            "contentType": {
+              "label": "JSON (application/json)"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "handleErrors",
+            "type": "boolean",
+            "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+            "required": true
+          },
+          {
+            "name": "useNewZLibDeCompress",
+            "type": "hidden"
+          }
+        ],
+        "expect": [
+          {
+            "name": "url",
+            "type": "url",
+            "label": "URL",
+            "required": true
+          },
+          {
+            "name": "serializeUrl",
+            "type": "boolean",
+            "label": "Serialize URL",
+            "required": true
+          },
+          {
+            "name": "method",
+            "type": "select",
+            "label": "Method",
+            "required": true,
+            "validate": {
+              "enum": [
+                "get",
+                "head",
+                "post",
+                "put",
+                "patch",
+                "delete",
+                "options"
+              ]
+            }
+          },
+          {
+            "name": "headers",
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Name",
+                "required": true
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Value"
+              }
+            ],
+            "type": "array",
+            "label": "Headers"
+          },
+          {
+            "name": "qs",
+            "spec": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Name",
+                "required": true
+              },
+              {
+                "name": "value",
+                "type": "text",
+                "label": "Value"
+              }
+            ],
+            "type": "array",
+            "label": "Query String"
+          },
+          {
+            "name": "bodyType",
+            "type": "select",
+            "label": "Body type",
+            "validate": {
+              "enum": ["raw", "x_www_form_urlencoded", "multipart_form_data"]
+            }
+          },
+          {
+            "name": "parseResponse",
+            "type": "boolean",
+            "label": "Parse response",
+            "required": true
+          },
+          {
+            "name": "authUser",
+            "type": "text",
+            "label": "User name"
+          },
+          {
+            "name": "authPass",
+            "type": "password",
+            "label": "Password"
+          },
+          {
+            "name": "timeout",
+            "type": "uinteger",
+            "label": "Timeout",
+            "validate": {
+              "max": 300,
+              "min": 1
+            }
+          },
+          {
+            "name": "shareCookies",
+            "type": "boolean",
+            "label": "Share cookies with other HTTP modules",
+            "required": true
+          },
+          {
+            "name": "ca",
+            "type": "cert",
+            "label": "Self-signed certificate"
+          },
+          {
+            "name": "rejectUnauthorized",
+            "type": "boolean",
+            "label": "Reject connections that are using unverified (self-signed) certificates",
+            "required": true
+          },
+          {
+            "name": "followRedirect",
+            "type": "boolean",
+            "label": "Follow redirect",
+            "required": true
+          },
+          {
+            "name": "useQuerystring",
+            "type": "boolean",
+            "label": "Disable serialization of multiple same query string keys as arrays",
+            "required": true
+          },
+          {
+            "name": "gzip",
+            "type": "boolean",
+            "label": "Request compressed content",
+            "required": true
+          },
+          {
+            "name": "useMtls",
+            "type": "boolean",
+            "label": "Use Mutual TLS",
+            "required": true
+          },
+          {
+            "name": "contentType",
+            "type": "select",
+            "label": "Content type",
+            "validate": {
+              "enum": [
+                "text/plain",
+                "application/json",
+                "application/xml",
+                "text/xml",
+                "text/html",
+                "custom"
+              ]
+            }
+          },
+          {
+            "name": "data",
+            "type": "buffer",
+            "label": "Request content"
+          },
+          {
+            "name": "followAllRedirects",
+            "type": "boolean",
+            "label": "Follow all redirect",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "module": "datastore:AddRecord",
+      "version": 1,
+      "parameters": {
+        "datastore": 14959
+      },
+      "mapper": {
+        "key": "{{3.data.id}}",
+        "data": {
+          "Name": "{{1.name}}"
+        },
+        "overwrite": true
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        },
+        "restore": {
+          "expect": {
+            "overwrite": {
+              "mode": "chose"
+            }
+          },
+          "parameters": {
+            "datastore": {
+              "label": "Podcast",
+              "nested": [
+                {
+                  "help": "You assign a unique key that can be used later to retrieve the record. If you leave this field blank, a key will be generated.",
+                  "name": "key",
+                  "type": "text",
+                  "label": "Key"
+                },
+                {
+                  "help": "This option is only effective if you specify a custom key under which the record shall be saved.",
+                  "name": "overwrite",
+                  "type": "boolean",
+                  "label": "Overwrite an existing record",
+                  "default": false,
+                  "required": true
+                },
+                {
+                  "name": "data",
+                  "spec": [
+                    {
+                      "name": "Name",
+                      "type": "text",
+                      "label": null,
+                      "required": false,
+                      "multiline": false
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Record"
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "datastore",
+            "type": "datastore",
+            "label": "Data store",
+            "required": true
+          }
+        ],
+        "expect": [
+          {
+            "name": "key",
+            "type": "text",
+            "label": "Key"
+          },
+          {
+            "name": "overwrite",
+            "type": "boolean",
+            "label": "Overwrite an existing record",
+            "required": true
+          },
+          {
+            "name": "data",
+            "spec": [
+              {
+                "name": "Name",
+                "type": "text",
+                "label": null
+              }
+            ],
+            "type": "collection",
+            "label": "Record"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu1.make.com"
+  }
+}
